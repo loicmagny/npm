@@ -1,4 +1,4 @@
-    <footer class="page-footer">
+    <footer class="page-footer indigo">
         <div class="container">
             <div class="row">
                 <div class="col l6 s12">
@@ -24,14 +24,8 @@
         </div>
     </footer>
     </main>
-    <script src="assets/libs/jquery/dist/jquery.min.js"></script>
-    <script src="assets/libs/materialize/js/materialize.min.js"></script>
-    <script src="assets/js/board.js"></script>
-    <script src="assets/js/swimming.js"></script>
-    <script src="assets/js/laserRun.js"></script>
-    <script src="assets/js/options.js"></script>
-    <script src="assets/js/script.js"></script>
-    <script src="assets/js/DOM.js"></script>
+    <script type="text/javascript" src="assets/libs/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="assets/js/loader.js" defer></script>
     </body>
 
     </html>

@@ -1,6 +1,6 @@
 <?php include 'header.php'; ?>
 <h1 class="center">Laser Run</h1>
-<main class="container wrapper center-align center ">
+<main class="wrapper center-align center ">
     <div class="row">
         <div class="col s12">
             <ul class="tabs tabs-fixed-width">

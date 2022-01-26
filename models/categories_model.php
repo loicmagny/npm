@@ -240,7 +240,7 @@ class category extends dataBase
 
         return $this;
     }
-
+// Méthode pour récupérer les id et noms des catégories en bdd
     public function getAllCatIds()
     {
         $query = 'SELECT `cat_id`, `cat_name` FROM ' . $this->tablename . '';
@@ -250,7 +250,7 @@ class category extends dataBase
         }
         return $allCatIdsResult;
     }
-
+// Méthode pour récupérer les détails d'une catégorie
     public function getAllCatDetails()
     {
         $query = 'SELECT `cat_id`, `cat_name`, `distance`, `time`, `ptsPerSec`, `points`, `lr_distance`, `lr_turns`, `lr_time`, `lr_points`, `lr_ptsPerSec` FROM ' . $this->tablename . '';
@@ -260,18 +260,18 @@ class category extends dataBase
         }
         return $allCatDetailsResult;
     }
-
+// Méthode qui permet de récupérer les détails d'une catégorie
     public function getCatDetails()
     {
         $query = 'SELECT `cat_id`, `cat_name`, `distance`, `time`, `ptsPerSec`, `points`, `lr_distance`, `lr_turns`, `lr_time`, `lr_points`, `lr_ptsPerSec` FROM ' . $this->tablename . ' WHERE `cat_id` = :cat_id';
         $catDetails = $this->db->prepare($query);
         $catDetails->bindValue(':cat_id', $this->cat_id, PDO::PARAM_INT);
         if ($catDetails->execute()) {
-            $CatDetailsResult = $catDetails->fetchAll(PDO::FETCH_OBJ);
+            $CatDetailsResult = $catDetails->fetch(PDO::FETCH_OBJ);
         }
         return $CatDetailsResult;
     }
-
+// Méthode qui permet de mettre à jour le nom d'une catégorie
     public function updateCategoryName()
     {
         $query = 'UPDATE ' . $this->tablename . ' SET `cat_name` = :cat_name WHERE `cat_id` = :cat_id';
@@ -280,6 +280,7 @@ class category extends dataBase
         $editCategoryName->bindValue(':cat_name', $this->cat_name, PDO::PARAM_STR);
         return $editCategoryName->execute();
     }
+    // Méthode qui permet de mettre à jour la distance de natation à parcourir d'une catégorie
     public function updateSwimDistance()
     {
         $query = 'UPDATE ' . $this->tablename . ' SET `distance` = :distance WHERE `cat_id` = :cat_id';
@@ -288,6 +289,7 @@ class category extends dataBase
         $editSwimDistance->bindValue(':distance', $this->distance, PDO::PARAM_INT);
         return $editSwimDistance->execute();
     }
+    // Méthode qui permet de mettre à jour le temps de natation par défaut d'une catégorie
     public function updateSwimTime()
     {
         $query = 'UPDATE ' . $this->tablename . ' SET `time` = :time WHERE `cat_id` = :cat_id';
@@ -296,6 +298,7 @@ class category extends dataBase
         $updateSwimTime->bindValue(':time', $this->time, PDO::PARAM_STR);
         return $updateSwimTime->execute();
     }
+    // Méthode qui permet de mettre à jour les points pour le temps par défaut d'une catégorie
     public function updateSwimPoints()
     {
         $query = 'UPDATE ' . $this->tablename . ' SET `points` = :points WHERE `cat_id` = :cat_id';
@@ -304,6 +307,7 @@ class category extends dataBase
         $updateSwimPoints->bindValue(':points', $this->points, PDO::PARAM_INT);
         return $updateSwimPoints->execute();
     }
+    // Méthode qui permet de mettre à jour les points par secondes d'une catégorie
     public function updateSwimPtsPerSec()
     {
         $query = 'UPDATE ' . $this->tablename . ' SET `ptsPerSec` = :ptsPerSec WHERE `cat_id` = :cat_id';
@@ -312,6 +316,7 @@ class category extends dataBase
         $updateSwimPtsPerSec->bindValue(':ptsPerSec', $this->ptsPerSec, PDO::PARAM_INT);
         return $updateSwimPtsPerSec->execute();
     }
+    // Méthode qui permet de mettre à jour la distance de Laser Run d'une catégorie
     public function updateLRDistance()
     {
         $query = 'UPDATE ' . $this->tablename . ' SET `lr_distance` = :lr_distance WHERE `cat_id` = :cat_id';
@@ -320,6 +325,7 @@ class category extends dataBase
         $updateLRDistance->bindValue(':lr_distance', $this->lr_distance, PDO::PARAM_INT);
         return $updateLRDistance->execute();
     }
+    // Méthode qui permet de mettre à jour les tours à réaliser lors du combiné d'une catégorie
     public function updateLRTurns()
     {
         $query = 'UPDATE ' . $this->tablename . ' SET `lr_turns` = :lr_turns WHERE `cat_id` = :cat_id';
@@ -328,6 +334,7 @@ class category extends dataBase
         $updateLRTurns->bindValue(':lr_turns', $this->lr_turns, PDO::PARAM_INT);
         return $updateLRTurns->execute();
     }
+    // Méthode qui permet de mettre à jour le temps par défaut pour le combiné d'une catégorie
     public function updateLRTime()
     {
         $query = 'UPDATE ' . $this->tablename . ' SET `lr_time` = :lr_time WHERE `cat_id` = :cat_id';
@@ -336,6 +343,7 @@ class category extends dataBase
         $updateLRTime->bindValue(':lr_time', $this->lr_time, PDO::PARAM_STR);
         return $updateLRTime->execute();
     }
+    // Méthode qui permet de mettre à jour les points par seconde pour le combiné d'une catégorie
     public function updateLRPtsPerSec()
     {
         $query = 'UPDATE ' . $this->tablename . ' SET `ptsPerSec` = :ptsPerSec WHERE `cat_id` = :cat_id';
@@ -344,6 +352,7 @@ class category extends dataBase
         $updateLRPtsPerSec->bindValue(':ptsPerSec', $this->ptsPerSec, PDO::PARAM_INT);
         return $updateLRPtsPerSec->execute();
     }
+    // Méthode qui permet de mettre à jour les points par défaut du combiné d'une catégorie
     public function updateLRPoints()
     {
         $query = 'UPDATE ' . $this->tablename . ' SET `lr_points` = :lr_points WHERE `cat_id` = :cat_id';

@@ -7,7 +7,7 @@ class swimming extends dataBase
     private $ath_id = 0;
     private $heats = 0;
     private $points = 0;
-    private $foul_id = 0;
+    private $fouls = '';
     private $tablename = 'swimming';
 
     public function __construct()
@@ -15,19 +15,11 @@ class swimming extends dataBase
         parent::__construct();
     }
 
-    /**
-     * Get the value of id
-     */
     public function getId()
     {
         return $this->id;
     }
 
-    /**
-     * Set the value of id
-     *
-     * @return  self
-     */
     public function setId($id)
     {
         $this->id = $id;
@@ -35,19 +27,11 @@ class swimming extends dataBase
         return $this;
     }
 
-    /**
-     * Get the value of time
-     */
     public function getTime()
     {
         return $this->time;
     }
 
-    /**
-     * Set the value of time
-     *
-     * @return  self
-     */
     public function setTime($time)
     {
         $this->time = $time;
@@ -55,19 +39,11 @@ class swimming extends dataBase
         return $this;
     }
 
-    /**
-     * Get the value of ath_id
-     */
     public function getAth_id()
     {
         return $this->ath_id;
     }
 
-    /**
-     * Set the value of ath_id
-     *
-     * @return  self
-     */
     public function setAth_id($ath_id)
     {
         $this->ath_id = $ath_id;
@@ -75,19 +51,11 @@ class swimming extends dataBase
         return $this;
     }
 
-    /**
-     * Get the value of heats
-     */
     public function getHeats()
     {
         return $this->heats;
     }
 
-    /**
-     * Set the value of heats
-     *
-     * @return  self
-     */
     public function setHeats($heats)
     {
         $this->heats = $heats;
@@ -95,47 +63,28 @@ class swimming extends dataBase
         return $this;
     }
 
-    /**
-     * Get the value of points
-     */
     public function getPoints()
     {
         return $this->points;
     }
 
-    /**
-     * Set the value of points
-     *
-     * @return  self
-     */
     public function setPoints($points)
     {
         $this->points = $points;
 
         return $this;
     }
-
-    /**
-     * Get the value of foul_id
-     */
-    public function getFoul_id()
+    public function getFouls()
     {
-        return $this->foul_id;
+        return $this->fouls;
     }
 
-    /**
-     * Set the value of foul_id
-     *
-     * @return  self
-     */
-    public function setFoul_id($foul_id)
+    public function setFouls($fouls)
     {
-        $this->foul_id = $foul_id;
+        $this->fouls = $fouls;
 
         return $this;
     }
-
-
 
     public function createAthleteResult()
     {
@@ -155,7 +104,6 @@ class swimming extends dataBase
         swi.`time`,
         swi.`ath_id`,
         swi.`heat`,
-        swi.`fouls_id`,
         swi.`points`,
         ath.`id` AS ath_id,
         ath.`first_name`,
@@ -178,7 +126,8 @@ class swimming extends dataBase
         ON
             ath.`cat_id` = cat.`cat_id`
         WHERE
-            ath.`gender` = ' . $gender . '';
+            ath.`gender` = ' . $gender . ' ORDER BY
+            swi.`points` DESC';
         $getAthletesTime = $this->db->query($query);
         if (is_object($getAthletesTime)) {
             $timeList = $getAthletesTime->fetchAll(PDO::FETCH_ASSOC);
@@ -186,17 +135,56 @@ class swimming extends dataBase
         return $timeList;
     }
 
-    public function updateAthResult($id)
+    //     SELECT
+    //     swi.`id`,
+    //     swi.`time`,
+    //     swi.`heat`,
+    //     swi.`fouls_id`,
+    //     swi.`points`,
+    //     ath.`id` AS ath_id,
+    //     ath.`first_name`,
+    //     ath.`last_name`,
+    //     ath.`club`,
+    //     ath.`type_id`,
+    //     ath.`gender`,
+    //     ath.`lr_handicap`,
+    //     cat.`cat_id`,
+    //     cat.`lr_distance`,
+    //     cat.`lr_turns`,
+    //     cat.`cat_name`
+    // FROM
+    //     swimming AS swi
+    // INNER JOIN `athletes` AS ath
+    // ON
+    //     swi.`ath_id` = ath.`id`
+    // INNER JOIN `categories` AS cat
+    // ON
+    //     ath.`cat_id` = cat.`cat_id`
+    // INNER JOIN fouls ON fouls.id = swi.fouls_id
+    // WHERE
+    //     ath.`gender` = 1
+    // ORDER BY
+    //     swi.`points`
+    // DESC
+
+    public function updateAthTime()
     {
-        $query = 'UPDATE ' . $this->tablename . ' SET `time`= :time, `ath_id`= :ath_id,`heat`=:heat, `points`=:points WHERE `ath_id` = ' . $id . '';
-        $updateAthResult = $this->db->prepare($query);
-        $updateAthResult->bindValue(':time', $this->time, PDO::PARAM_STR);
-        $updateAthResult->bindValue(':ath_id', $this->ath_id, PDO::PARAM_INT);
-        $updateAthResult->bindValue(':heat', $this->heats, PDO::PARAM_INT);
-        $updateAthResult->bindValue(':points', $this->points, PDO::PARAM_INT);
-        return $updateAthResult->execute();
+        $query = 'UPDATE ' . $this->tablename . ' SET `time`= :time WHERE `ath_id` = :ath_id';
+        $updateAthTime = $this->db->prepare($query);
+        $updateAthTime->bindValue(':time', $this->time, PDO::PARAM_STR);
+        $updateAthTime->bindValue(':ath_id', $this->ath_id, PDO::PARAM_INT);
+        return $updateAthTime->execute();
     }
-    function __destruct()
+    public function updateAthPoints()
+    {
+        $query = 'UPDATE ' . $this->tablename . ' SET `points`= :points WHERE `ath_id` = :ath_id';
+        $updateAthPoints = $this->db->prepare($query);
+        $updateAthPoints->bindValue(':points', $this->time, PDO::PARAM_INT);
+        $updateAthPoints->bindValue(':ath_id', $this->ath_id, PDO::PARAM_INT);
+        return $updateAthPoints->execute();
+    }
+
+    public function __destruct()
     {
     }
 }

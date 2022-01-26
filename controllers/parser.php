@@ -1,6 +1,7 @@
 <?php
 
 $xlsx = 0;
+// Traitement après la validation
 if (isset($_POST['send']) || isset($_POST['start'])) {
 
     $xlsx = getExcelFiles();
@@ -13,12 +14,14 @@ if (isset($_POST['send']) || isset($_POST['start'])) {
     }
     $sent = true;
 }
+
+// Fonction pour récupérer la totalité des fichiers dans le dossier source
 function findAllFiles()
 {
     return scandir('assets/uploads');
 }
 
-
+// Permet de récupérer les données du/des fichiers Excel dans le dossier src
 function getExcelFiles()
 {
     $files = [];
@@ -37,19 +40,4 @@ function getExcelFiles()
         }
     }
     return $data;
-}
-function prepare($datas)
-{
-    foreach ($datas->rows() as $data) {
-        $club = $data[1];
-        $fName = $data[2];
-        $lName = $data[3];
-        $cat = $data[4];
-        $swimTime = $data[5];
-        $gender = $data[6];
-        $type = $data[7];
-
-        $posts = array('Club' => $club, 'Prénom' => $fName, 'Nom' => $lName, 'Catégorie' => $cat, $swimTime => 'Temps', 'Sexe' => $gender, 'Epreuve' => $type);
-    }
-    return $posts;
 }

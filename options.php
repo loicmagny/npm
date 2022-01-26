@@ -1,4 +1,4 @@
-<?php include 'header.php'; ?>
+<?php include 'header.php';?>
 
 <h1 class="center">Options</h1>
 <main class="container wrapper center-align center">
@@ -68,17 +68,17 @@
                 </form>
             </div>
         </div>
-        <div id="display" class="col s12">
-            <ul class="collapsible expandable" id="displayOptions">
+        <div id="penalties" class="col s12">
+            <ul class="collapsible expandable" id="penaltiesOptions">
             </ul>
 
         </div>
-        <div id="penalties" class="col s12">
-            <ul class="collapsible expandable" id="penaltiesOptions">
+        <div id="display" class="col s12">
+            <ul class="collapsible expandable" id="displayOptions">
             </ul>
 
         </div>
     </div>
 </main>
 
-<?php include 'footer.php'; ?>
+<?php include 'footer.php';?>

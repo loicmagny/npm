@@ -1,218 +1,109 @@
-$(document).ready(function () {
+if ($(location).attr('href') == OPTIONS) {
+	// Fonction permettant de remplir le select des catégories avec chaque catégories contenues dans la table categories
+	function fillCatSelect(datas) {
+		for (x in datas) {
+			$('#catSelect').append(
+				'<option value="' +
+					datas[x].cat_id +
+					'" id="select_' +
+					datas[x].cat_id +
+					'">' +
+					datas[x].cat_name +
+					'</option>'
+			);
+			$('select').formSelect();
+		}
+	}
+	// Fonction pour mettre le select en cas de modification
+	function updateSelect(datas) {
+		$('#select_' + datas.cat_id + '').html(
+			'<option value="' +
+				datas.cat_id +
+				'" id="select_' +
+				datas.cat_id +
+				'">' +
+				datas.cat_name +
+				'</option>'
+		);
+		fillOptionsInputs(datas);
+	}
 
-    let options = 'http://localhost/Excel-converter/options.php'
-    if ($(location).attr("href") == options) {
-        $.post(
-            'handler.php', {
-                AllCatIds: true
-            },
-            function (data) {
-                let datas = JSON.parse(data)
-                for (x in datas) {
-                    $('#catSelect').append('<option value="' + datas[x].cat_id + '" id="select_' + datas[x].cat_id + '">' + datas[x].cat_name + '</option>')
-                    $('select').formSelect();
-                }
+	// Gestionnaires d'évènements qui, au changement, sauvegarde les nouvelles données en base de données, écrasant les anciennes
+	$('#catSelect').change(function () {
+		let id = $('#catSelect').val();
+		ajaxCall(['getCategoryDetails', 3, [id]]);
+	});
+// Update des champs de la table categories en temps réel grâce à l'évènement .change
+	$('#cat_name').change(function () {
+		let id = $('#catSelect').val();
+		let name = $('#cat_name').val();
+		ajaxCall(['updateCatName', 3, [id, name]]);
+	});
+	$('#swimDistance').change(function () {
+		let id = $('#catSelect').val();
+		let swimDistance = $('#swimDistance').val();
+		ajaxCall(['updateSwimDistance', 3, [id, swimDistance]]);
+	});
+	$('#swimTime').change(function () {
+		let id = $('#catSelect').val();
+		let swimTime = $('#swimTime').val();
+		ajaxCall(['updateSwimTime', 3, [id, swimTime]]);
+	});
+	$('#swimPoints').change(function () {
+		let id = $('#catSelect').val();
+		let swimPoints = $('#swimPoints').val();
+		ajaxCall(['updateSwimPoints', 3, [id, swimPoints]]);
+	});
+	$('#swimPtsPerSec').change(function () {
+		let id = $('#catSelect').val();
+		let swimPtsPerSec = $('#swimPtsPerSec').val();
+		ajaxCall(['updateSwimPtsPerSec', 3, [id, swimPtsPerSec]]);
+	});
+	$('#lr_distance').change(function () {
+		let id = $('#catSelect').val();
+		let lrDistance = $('#lr_distance').val();
+		ajaxCall(['updateLRDistance', 3, [id, lrDistance]]);
+	});
+	$('#lr_turns').change(function () {
+		let id = $('#catSelect').val();
+		let lrTurns = $('#lr_turns').val();
+		ajaxCall(['updateLRTurns', 3, [id, lrTurns]]);
+	});
+	$('#lr_time').change(function () {
+		let id = $('#catSelect').val();
+		let lrTime = $('#lr_time').val();
+		ajaxCall(['updateLRTime', 3, [id, lrTime]]);
+	});
+	$('#lr_ptsPerSec').change(function () {
+		let id = $('#catSelect').val();
+		let lrPtsPerSec = $('#lr_ptsPerSec').val();
+		ajaxCall(['updateLRPtsPerSec', 3, [id, lrPtsPerSec]]);
+	});
+	$('#lr_points').change(function () {
+		let id = $('#catSelect').val();
+		let lrPoints = $('#lr_points').val();
+		ajaxCall(['updateLRPoints', 3, [id, lrPoints]]);
+	});
+}
 
-            })
+//Fonction pour remplir et mettre en forme les input lorsque la catégorie à modifier est choisie par l'utilisateur
+function fillOptionsInputs(array) {
+	$('#cat_name').val(array.cat_name).siblings('label').addClass('active');
+	$('#swimDistance').val(array.distance).siblings('label').addClass('active');
+	$('#swimTime').val(array.time).siblings('label').addClass('active');
+	$('#swimPoints').val(array.points).siblings('label').addClass('active');
+	$('#swimPtsPerSec').val(array.ptsPerSec).siblings('label').addClass('active');
+	$('#lr_distance').val(array.lr_distance).siblings('label').addClass('active');
+	$('#lr_turns').val(array.lr_turns).siblings('label').addClass('active');
+	$('#lr_time').val(array.lr_time).siblings('label').addClass('active');
+	$('#lr_points').val(array.lr_points).siblings('label').addClass('active');
+	$('#lr_ptsPerSec')
+		.val(array.lr_ptsPerSec)
+		.siblings('label')
+		.addClass('active');
+}
 
-        $('#catSelect').change(function () {
-            let id = $('#catSelect').val()
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//Appel des fonctions
 
-            $.post(
-                'handler.php', {
-                    cat_id: id,
-                    catDetails: true
-                },
-                function (data) {
-                    let datas = JSON.parse(data)
-                    $('#select_' + datas[0].cat_id + '').html('<option value="' + datas[0].cat_id + '" id="select_' + datas[0].cat_id + '">' + datas[0].cat_name + '</option>')
-                    fillOptionsInputs(datas)
-                })
-        })
-
-        $('#cat_name').change(function () {
-            let id = $('#catSelect').val()
-            let name = $('#cat_name').val()
-            $.post(
-                'handler.php', {
-                    cat_id: id,
-                    cat_name: name,
-                    editCatName: true
-                },
-                function (data) {
-                    let datas = JSON.parse(data)
-                    $('#select_' + datas[0].cat_id + '').html('<option value="' + datas[0].cat_id + '" id="select_' + datas[0].cat_id + '">' + datas[0].cat_name + '</option>')
-                    fillOptionsInputs(datas)
-                }
-            )
-        })
-        $('#swimDistance').change(function () {
-            let id = $('#catSelect').val()
-            let swimDistance = $('#swimDistance').val()
-            $.post(
-                'handler.php', {
-                    cat_id: id,
-                    distance: swimDistance,
-                    editSwimDistance: true
-                },
-                function (data) {
-                    let datas = JSON.parse(data)
-                    $('#select_' + datas[0].cat_id + '').html('<option value="' + datas[0].cat_id + '" id="select_' + datas[0].cat_id + '">' + datas[0].cat_name + '</option>')
-                    fillOptionsInputs(datas)
-                }
-            )
-        })
-        $('#swimTime').change(function () {
-            let id = $('#catSelect').val()
-            let swimTime = $('#swimTime').val()
-            $.post(
-                'handler.php', {
-                    cat_id: id,
-                    time: swimTime,
-                    editSwimTime: true
-                },
-                function (data) {
-                    let datas = JSON.parse(data)
-                    $('#select_' + datas[0].cat_id + '').html('<option value="' + datas[0].cat_id + '" id="select_' + datas[0].cat_id + '">' + datas[0].cat_name + '</option>')
-                    fillOptionsInputs(datas)
-                }
-            )
-        })
-        $('#swimPoints').change(function () {
-            let id = $('#catSelect').val()
-            let swimPoints = $('#swimPoints').val()
-            $.post(
-                'handler.php', {
-                    cat_id: id,
-                    points: swimPoints,
-                    editSwimPoints: true
-                },
-                function (data) {
-                    let datas = JSON.parse(data)
-                    $('#select_' + datas[0].cat_id + '').html('<option value="' + datas[0].cat_id + '" id="select_' + datas[0].cat_id + '">' + datas[0].cat_name + '</option>')
-                    fillOptionsInputs(datas)
-                }
-            )
-        })
-        $('#swimPtsPerSec').change(function () {
-            let id = $('#catSelect').val()
-            let swimPtsPerSec = $('#swimPtsPerSec').val()
-            $.post(
-                'handler.php', {
-                    cat_id: id,
-                    ptsPerSec: swimPtsPerSec,
-                    editSwimPtsPerSec: true
-                },
-                function (data) {
-                    let datas = JSON.parse(data)
-                    $('#select_' + datas[0].cat_id + '').html('<option value="' + datas[0].cat_id + '" id="select_' + datas[0].cat_id + '">' + datas[0].cat_name + '</option>')
-                    fillOptionsInputs(datas)
-                }
-            )
-        })
-        $('#lr_distance').change(function () {
-            let id = $('#catSelect').val()
-            let lrDistance = $('#lr_distance').val()
-            $.post(
-                'handler.php', {
-                    cat_id: id,
-                    lr_distance: lrDistance,
-                    editLRDistance: true
-                },
-                function (data) {
-                    let datas = JSON.parse(data)
-                    $('#select_' + datas[0].cat_id + '').html('<option value="' + datas[0].cat_id + '" id="select_' + datas[0].cat_id + '">' + datas[0].cat_name + '</option>')
-                    fillOptionsInputs(datas)
-                }
-            )
-        })
-        $('#lr_turns').change(function () {
-            let id = $('#catSelect').val()
-            let lrTurns = $('#lr_turns').val()
-            $.post(
-                'handler.php', {
-                    cat_id: id,
-                    lr_turns: lrTurns,
-                    editLRTurns: true
-                },
-                function (data) {
-                    let datas = JSON.parse(data)
-                    $('#select_' + datas[0].cat_id + '').html('<option value="' + datas[0].cat_id + '" id="select_' + datas[0].cat_id + '">' + datas[0].cat_name + '</option>')
-                    fillOptionsInputs(datas)
-                }
-            )
-        })
-        $('#lr_time').change(function () {
-            let id = $('#catSelect').val()
-            let lrTime = $('#lr_time').val()
-            $.post(
-                'handler.php', {
-                    cat_id: id,
-                    lr_time: lrTime,
-                    editLRTime: true
-                },
-                function (data) {
-                    let datas = JSON.parse(data)
-                    $('#select_' + datas[0].cat_id + '').html('<option value="' + datas[0].cat_id + '" id="select_' + datas[0].cat_id + '">' + datas[0].cat_name + '</option>')
-                    fillOptionsInputs(datas)
-                }
-            )
-        })
-        $('#lr_ptsPerSec').change(function () {
-            let id = $('#catSelect').val()
-            let lrPtsPerSec = $('#lr_ptsPerSec').val()
-            $.post(
-                'handler.php', {
-                    cat_id: id,
-                    lr_ptsPerSec: lrPtsPerSec,
-                    editLRPtsPerSec: true
-                },
-                function (data) {
-                    let datas = JSON.parse(data)
-                    $('#select_' + datas[0].cat_id + '').html('<option value="' + datas[0].cat_id + '" id="select_' + datas[0].cat_id + '">' + datas[0].cat_name + '</option>')
-                    fillOptionsInputs(datas)
-                }
-            )
-        })
-        $('#lr_points').change(function () {
-            let id = $('#catSelect').val()
-            let lrPoints = $('#lr_points').val()
-            $.post(
-                'handler.php', {
-                    cat_id: id,
-                    lr_points: lrPoints,
-                    editLRPoints: true
-                },
-                function (data) {
-                    let datas = JSON.parse(data)
-                    $('#select_' + datas[0].cat_id + '').html('<option value="' + datas[0].cat_id + '" id="select_' + datas[0].cat_id + '">' + datas[0].cat_name + '</option>')
-                    fillOptionsInputs(datas)
-                }
-            )
-        })
-    }
-
-    function fillOptionsInputs(array) {
-        $('#cat_name').val(array[0].cat_name)
-        $('#swimDistance').val(array[0].distance)
-        $('#swimTime').val(array[0].time)
-        $('#swimPoints').val(array[0].points)
-        $('#swimPtsPerSec').val(array[0].ptsPerSec)
-        $('#lr_distance').val(array[0].lr_distance)
-        $('#lr_turns').val(array[0].lr_turns)
-        $('#lr_time').val(array[0].lr_time)
-        $('#lr_points').val(array[0].lr_points)
-        $('#lr_ptsPerSec').val(array[0].lr_ptsPerSec)
-        $('#cat_name').siblings('label').addClass('active')
-        $('#swimDistance').siblings('label').addClass('active')
-        $('#swimTime').siblings('label').addClass('active')
-        $('#swimPoints').siblings('label').addClass('active')
-        $('#swimPtsPerSec').siblings('label').addClass('active')
-        $('#lr_distance').siblings('label').addClass('active')
-        $('#lr_turns').siblings('label').addClass('active')
-        $('#lr_time').siblings('label').addClass('active')
-        $('#lr_points').siblings('label').addClass('active')
-        $('#lr_ptsPerSec').siblings('label').addClass('active')
-    }
-
-})
+ajaxCall(['getAllCatIds', 3]);

@@ -7,19 +7,15 @@ require_once 'config.php';
 
 class database
 {
-
     protected $db;
-
-
     protected function __construct()
     {
         try {
-            $this->db = new PDO('mysql:host=' . HOST . ';dbname=' . DBNAME . ';charset=utf8', LOGIN, PASSWORD);
+            $this->db = new PDO('mysql:host=' . HOST . ';dbname=' . DBNAME . ';charset=utf8', LOGIN, PASSWORD, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING));
         } catch (Exception $exc) {
             echo $exc->getMessage();
         }
     }
-
     protected function __destruct()
     {
         $this->db = NULL;
